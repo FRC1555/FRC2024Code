@@ -21,26 +21,22 @@ public class TagDetectorCMD extends Command {
     }
 
     @Override
-    public void initialize() {
-
-    }
+    public void initialize() {}
 
     @Override
     public void execute() {
         if (m_Limelight.AprilTagData() == 8 || m_Limelight.AprilTagData() == 7) {
-      m_LEDs.lightsNormal(Constants.LEDs.SpkrRead);
-    } else if (m_Limelight.AprilTagData() == 6) {
-      m_LEDs.lightsNormal(Constants.LEDs.AmpRead);
-    } else if (m_Limelight.AprilTagData() == 9) {
-      m_LEDs.lightsNormal(Constants.LEDs.SorcRead);
-    } else {
-      m_LEDs.lightsNormal(Constants.LEDs.NoTag);
-    }
+            m_LEDs.lightsNormal(Constants.LEDs.SpkrRead);
+        } else if (m_Limelight.AprilTagData() == 6) {
+            m_LEDs.lightsNormal(Constants.LEDs.AmpRead);
+        } else if (m_Limelight.AprilTagData() == 9) {
+            m_LEDs.lightsNormal(Constants.LEDs.SorcRead);
+        } else {
+            m_LEDs.lightsNormal(Constants.LEDs.NoTag);
+        }
     }
 
     @Override
-    public void end(boolean interrupted) {
-
-    }
+    public void end(boolean interrupted) {}
 
 }
