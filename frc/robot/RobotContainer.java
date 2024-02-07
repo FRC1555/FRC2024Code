@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -21,7 +20,7 @@ public class RobotContainer {
   private final LimelightSubsystem m_Limelight = new LimelightSubsystem();
   private final LEDsSubsystem m_LEDs = new LEDsSubsystem();
   private XboxController m_DriveController = new XboxController(Constants.OperatorInter.DriverController);
-  private PS4Controller m_ManipController = new PS4Controller(Constants.OperatorInter.ManipController);
+  private XboxController m_ManipController = new XboxController(Constants.OperatorInter.ManipController);
   private final WestCoastDriveSubsystem m_WestCoastDrive = new WestCoastDriveSubsystem();
 
   public RobotContainer() {
@@ -40,7 +39,6 @@ public class RobotContainer {
 
     m_Limelight.setDefaultCommand(new TagDetectorCMD(m_Limelight, m_LEDs));
 
-    new JoystickButton(m_ManipController, PS4Controller.Button.kR1.value).onTrue(new InstantCommand( () -> m_LEDs.lightsNormal(0.5)));
   }
 
   public Command getAutonomousCommand() {
