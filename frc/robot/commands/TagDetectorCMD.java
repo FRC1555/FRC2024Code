@@ -17,11 +17,14 @@ public class TagDetectorCMD extends Command {
 
         addRequirements(m_LEDs);
         addRequirements(m_Limelight);
+        
 
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+        
+    }
 
     @Override
     public void execute() {
@@ -37,6 +40,8 @@ public class TagDetectorCMD extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+    }
+    // Empty blueprint 
 
 }

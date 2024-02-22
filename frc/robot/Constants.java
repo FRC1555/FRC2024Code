@@ -2,11 +2,12 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.wpilibj.Timer;
-import frc.lib.PIDGains;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.lib.PIDGains;
 
 public class Constants {
     public static final class LEDs {
@@ -23,6 +24,11 @@ public class Constants {
         public static final double kDriveDeadband = 0.05;
         public static final double kArmManualDeadband = 0.05;
         public static final double kArmManualScale = 0.5;
+
+        public static final int kDPadUp = 0;
+        public static final int kDPadDown = 180;
+        public static final int kDPadLeft = 270;
+        public static final int kDPadRight = 90;
     }
 
     public static final class Drivetrain {
@@ -61,7 +67,10 @@ public class Constants {
         // public static double lastTimeStamp = Timer.getFPGATimestamp();
         // public static double lastTimeStampR = Timer.getFPGATimestamp();
         // public static final double speedLimit = .15;
-        public static final double kMaxSpeedMetersPerSecond = 4.8;
+
+        // speed limiters to make stuff move at certain speeds.
+        public static final double kMaxSpeedMPSRegular = 4.8; // regular speed mode
+        public static final double kMaxSpeedMPSSlow = 1.0; // used in super slow mode, for finer control
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
         public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -151,5 +160,59 @@ public class Constants {
 
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
+    }
+
+    public static final class Intake {
+        public static final int kCanId = 21;
+        public static final boolean kMotorInverted = true;
+        public static final int kCurrentLimit = 80;
+
+        public static final PIDGains kPositionGains = new PIDGains(1.0, 0.0, 0.0);
+        public static final double kPositionTolerance = 0.5;
+
+        public static final double kIntakePower = 0.7;
+
+        public static final double kRetractDistance = -3.5;
+
+        public static final double kShotFeedTime = 1.0;
+    }
+    
+    public static final class Launcher {
+        public static final int kTopCanId = 18;
+        public static final int kBottomCanId = 19;
+
+        public static final int kCurrentLimit = 80;
+
+        public static final double kTopPower = 0.7;
+        public static final double kBottomPower = 0.8;
+    }
+
+    public static final class Arm {
+        public static final int kArmCanId = 20;
+        public static final boolean kArmInverted = true;
+        public static final int kCurrentLimit = 40;
+
+        public static final double kSoftLimitReverse = -1.15;
+        public static final double kSoftLimitForward = 0.0;
+
+        public static final double kArmGearRatio = (1.0 / 25.0) * (28.0 / 50.0) * (16.0 / 64.0);
+        public static final double kPositionFactor =
+            kArmGearRatio
+                * 2.0
+                * Math.PI; // multiply SM value by this number and get arm position in radians
+        public static final double kVelocityFactor = kArmGearRatio * 2.0 * Math.PI / 60.0;
+        public static final double kArmFreeSpeed = 5676.0 * kVelocityFactor;
+        public static final double kArmZeroCosineOffset =
+            1.342; // radians to add to converted arm position to get real-world arm position (starts at
+        // ~76.9deg angle)
+        public static final ArmFeedforward kArmFeedforward =
+            new ArmFeedforward(0.0, 3.0, 12.0 / kArmFreeSpeed, 0.0);
+        public static final PIDGains kArmPositionGains = new PIDGains(2.5, 0.0, 0.0);
+        public static final TrapezoidProfile.Constraints kArmMotionConstraint =
+            new TrapezoidProfile.Constraints(1.0, 2.0);
+
+        public static final double kHomePosition = 0.0;
+        public static final double kScoringPosition = 0.0;
+        public static final double kIntakePosition = -1.17;
     }
 }

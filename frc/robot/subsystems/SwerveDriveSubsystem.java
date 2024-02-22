@@ -121,7 +121,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    * @param rateLimit Whether to enable rate limiting for smoother control.
    */
   public void drive(
-      double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+      double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit, double speedLimit) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -176,8 +176,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * Drivetrain.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * Drivetrain.kMaxSpeedMetersPerSecond;
+    double xSpeedDelivered = xSpeedCommanded * speedLimit;
+    double ySpeedDelivered = ySpeedCommanded * speedLimit;
     double rotDelivered = m_currentRotation * Drivetrain.kMaxAngularSpeed;
 
     var swerveModuleStates =
@@ -190,7 +190,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                     Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)))
                 : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, Drivetrain.kMaxSpeedMetersPerSecond);
+        swerveModuleStates, speedLimit);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -212,7 +212,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, Drivetrain.kMaxSpeedMetersPerSecond);
+        desiredStates, Drivetrain.kMaxSpeedMPSRegular);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);
