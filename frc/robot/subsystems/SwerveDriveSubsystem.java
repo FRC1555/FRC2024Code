@@ -4,6 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,11 +20,20 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.Auton;
 import frc.robot.Constants.Drivetrain;
 import frc.utils.SwerveUtils;
 
+
 public class SwerveDriveSubsystem extends SubsystemBase {
+
+  private final Field2d m_Field;
+
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft =
       new MAXSwerveModule(
@@ -56,6 +70,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(Drivetrain.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(Drivetrain.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+  private double xSpeedDelivered;
+  private double ySpeedDelivered;
+  private double rotDelivered;
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
@@ -70,7 +87,38 @@ public class SwerveDriveSubsystem extends SubsystemBase {
           });
 
   /** Creates a new DriveSubsystem. */
-  public SwerveDriveSubsystem() {}
+  public SwerveDriveSubsystem() {
+
+    m_Field = new Field2d();
+    SmartDashboard.putData("Field", m_Field);
+
+    AutoBuilder.configureHolonomic(
+      this::getPose, // Robot pose supplier
+      this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+      this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+        new PIDConstants(0.1, 0.0, 0.0), // Rotation PID constants
+        Auton.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
+        0.37, // Drive base radius in meters. Distance from robot center to furthest module.
+        new ReplanningConfig() // Default path replanning config. See the API for the options here
+      ),
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      this
+    );
+
+  }
 
   @Override
   public void periodic() {
@@ -83,6 +131,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+    
+    m_Field.setRobotPose(m_odometry.getPoseMeters());
   }
 
   /**
@@ -99,7 +149,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
    *
    * @param pose The pose to which to set the odometry.
    */
-  public void resetOdometry(Pose2d pose) {
+  public void resetPose(Pose2d pose) {
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
         new SwerveModulePosition[] {
@@ -109,6 +159,36 @@ public class SwerveDriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         },
         pose);
+  }
+
+  public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+    setModuleStates(Constants.Drivetrain.kDriveKinematics.toSwerveModuleStates(chassisSpeeds));
+    // double xSpeed = chassisSpeeds.vxMetersPerSecond;
+    // double ySpeed = chassisSpeeds.vyMetersPerSecond;
+    // double rot = chassisSpeeds.omegaRadiansPerSecond;
+
+    // boolean fieldRelative = false;
+
+    // xSpeedDelivered = xSpeed * Auton.kMaxSpeedMetersPerSecond;
+    // ySpeedDelivered = ySpeed * Auton.kMaxSpeedMetersPerSecond;
+    // rotDelivered = rot * Drivetrain.kMaxAngularSpeed;
+
+    // var swerveModuleStates =
+    //     Drivetrain.kDriveKinematics.toSwerveModuleStates(
+    //         fieldRelative
+    //             ? ChassisSpeeds.fromFieldRelativeSpeeds(
+    //                 xSpeedDelivered,
+    //                 ySpeedDelivered,
+    //                 rotDelivered,
+    //                 Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)))
+    //             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+    // SwerveDriveKinematics.desaturateWheelSpeeds(
+    //     swerveModuleStates, Auton.kMaxSpeedMetersPerSecond);
+    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    // m_frontRight.setDesiredState(swerveModuleStates[1]);
+    // m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    // m_rearRight.setDesiredState(swerveModuleStates[3]);
+
   }
 
   /**
@@ -176,9 +256,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * speedLimit;
-    double ySpeedDelivered = ySpeedCommanded * speedLimit;
-    double rotDelivered = m_currentRotation * Drivetrain.kMaxAngularSpeed;
+    xSpeedDelivered = xSpeedCommanded * speedLimit;
+    ySpeedDelivered = ySpeedCommanded * speedLimit;
+    rotDelivered = m_currentRotation * Drivetrain.kMaxAngularSpeed;
 
     var swerveModuleStates =
         Drivetrain.kDriveKinematics.toSwerveModuleStates(
@@ -230,6 +310,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
+  }
+
+  public ChassisSpeeds getCurrentSpeeds() {
+    return new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
   }
 
   /**

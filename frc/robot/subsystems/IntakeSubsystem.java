@@ -36,7 +36,7 @@ public class IntakeSubsystem extends SubsystemBase {
         m_controller = m_motor.getPIDController();
         PIDGains.setSparkMaxGains(m_controller, Constants.Intake.kPositionGains);
 
-        m_motor.burnFlash();
+        // m_motor.burnFlash();
 
         m_positionMode = false;
         m_targetPosition = m_encoder.getPosition();

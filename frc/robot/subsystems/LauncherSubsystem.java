@@ -11,7 +11,7 @@ public class LauncherSubsystem extends SubsystemBase {
     private CANSparkMax m_topMotor;
     private CANSparkMax m_bottomMotor;
 
-    private boolean m_launcherRunning;
+    private double m_launcherRunning;
 
     /** Creates a new LauncherSubsystem. */
     public LauncherSubsystem() {
@@ -22,7 +22,7 @@ public class LauncherSubsystem extends SubsystemBase {
         m_topMotor.setSmartCurrentLimit(Constants.Launcher.kCurrentLimit);
         m_topMotor.setIdleMode(IdleMode.kBrake);
 
-        m_topMotor.burnFlash();
+        // m_topMotor.burnFlash();
 
         m_bottomMotor =
             new CANSparkMax(Constants.Launcher.kBottomCanId, CANSparkLowLevel.MotorType.kBrushless);
@@ -30,9 +30,9 @@ public class LauncherSubsystem extends SubsystemBase {
         m_bottomMotor.setSmartCurrentLimit(Constants.Launcher.kCurrentLimit);
         m_bottomMotor.setIdleMode(IdleMode.kBrake);
 
-        m_bottomMotor.burnFlash();
+        // m_bottomMotor.burnFlash();
 
-        m_launcherRunning = false;
+        m_launcherRunning = 0;
     }
 
     /**
@@ -40,7 +40,11 @@ public class LauncherSubsystem extends SubsystemBase {
      * in a {@code RunCommand}.
      */
     public void runLauncher() {
-        m_launcherRunning = true;
+        m_launcherRunning = 1;
+    }
+
+    public void runReverse() {
+        m_launcherRunning = -1;
     }
 
     /**
@@ -48,15 +52,18 @@ public class LauncherSubsystem extends SubsystemBase {
      * in a {@code RunCommand}.
      */
     public void stopLauncher() {
-        m_launcherRunning = false;
+        m_launcherRunning = 0;
     }
 
     @Override
     public void periodic() { // this method will be called once per scheduler run
         // set the launcher motor powers based on whether the launcher is on or not
-        if (m_launcherRunning) {
+        if (m_launcherRunning == 1) {
             m_topMotor.set(Constants.Launcher.kTopPower);
             m_bottomMotor.set(Constants.Launcher.kBottomPower);
+        } else if (m_launcherRunning == -1) {
+            m_topMotor.set(-Constants.Launcher.kTopPower);
+            m_bottomMotor.set(-Constants.Launcher.kBottomPower);
         } else {
             m_topMotor.set(0.0);
             m_bottomMotor.set(0.0);

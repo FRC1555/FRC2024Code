@@ -3,6 +3,8 @@ package frc.robot;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -69,7 +71,7 @@ public class Constants {
         // public static final double speedLimit = .15;
 
         // speed limiters to make stuff move at certain speeds.
-        public static final double kMaxSpeedMPSRegular = 4.8; // regular speed mode
+        public static final double kMaxSpeedMPSRegular = 4.8; // regular speed mode; return to 4.8 eventually
         public static final double kMaxSpeedMPSSlow = 1.0; // used in super slow mode, for finer control
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
@@ -107,6 +109,8 @@ public class Constants {
         public static final int kRearRightTurningCanId = 16;
 
         public static final boolean kGyroReversed = false;
+        
+        public static final Pose2d kDefaultPose = new Pose2d(0, 0, new Rotation2d(0.0));
     }
 
     public static final class ModuleConstants {
@@ -183,8 +187,8 @@ public class Constants {
 
         public static final int kCurrentLimit = 80;
 
-        public static final double kTopPower = 0.7;
-        public static final double kBottomPower = 0.8;
+        public static final double kTopPower = -0.8; // apparently, top and bottom are switched for the launch motors
+        public static final double kBottomPower = -0.9;
     }
 
     public static final class Arm {
@@ -192,8 +196,8 @@ public class Constants {
         public static final boolean kArmInverted = true;
         public static final int kCurrentLimit = 40;
 
-        public static final double kSoftLimitReverse = -1.15;
-        public static final double kSoftLimitForward = 0.0;
+        public static final double kSoftLimitReverse = -1.1;
+        public static final double kSoftLimitForward = 0.1;
 
         public static final double kArmGearRatio = (1.0 / 25.0) * (28.0 / 50.0) * (16.0 / 64.0);
         public static final double kPositionFactor =
@@ -207,12 +211,34 @@ public class Constants {
         // ~76.9deg angle)
         public static final ArmFeedforward kArmFeedforward =
             new ArmFeedforward(0.0, 3.0, 12.0 / kArmFreeSpeed, 0.0);
-        public static final PIDGains kArmPositionGains = new PIDGains(2.5, 0.0, 0.0);
+        public static final PIDGains kArmPositionGains = new PIDGains(1.5, 0.0, 0.0);
         public static final TrapezoidProfile.Constraints kArmMotionConstraint =
-            new TrapezoidProfile.Constraints(1.0, 2.0);
+            new TrapezoidProfile.Constraints(2.5, 1.0);
 
         public static final double kHomePosition = 0.0;
         public static final double kScoringPosition = 0.0;
-        public static final double kIntakePosition = -1.17;
+        public static final double kIntakePosition = -1.15;
+        public static final double kClimbPosition = 0.05;
+    }
+
+    public static final class Auton {
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    
+        public static final double kPXController = 1;
+        public static final double kPYController = 1;
+        public static final double kPThetaController = 1;
+    
+        // Constraint for the motion profiled robot angle controller
+        public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+            new TrapezoidProfile.Constraints(
+                kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    }
+
+    public static final class Sensors {
+        public static final int kTopSwitchPort = 0;
+        public static final int kBottomSwitchPort = 1;
     }
 }

@@ -13,6 +13,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkRelativeEncoder;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
 import frc.robot.Constants;
@@ -54,7 +55,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_controller = m_motor.getPIDController();
         PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
 
-        m_motor.burnFlash();
+        // m_motor.burnFlash();
 
         m_setpoint = Constants.Arm.kHomePosition;
 
@@ -72,6 +73,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setTargetPosition(double _setpoint) {
         if (_setpoint != m_setpoint) {
             m_setpoint = _setpoint;
+            System.out.println(m_setpoint);
             updateMotionProfile();
         }
     }
@@ -129,7 +131,17 @@ public class ArmSubsystem extends SubsystemBase {
         m_manualValue = _power; // this variable is only used for logging or debugging if needed
     }
 
+    public double armPosition() {
+        return m_encoder.getPosition();
+    }
+
+    public boolean isDoneMoving() {
+        return m_profile.isFinished(m_timer.get()); 
+    }
+
     @Override
     public void periodic() { // This method will be called once per scheduler run
+        SmartDashboard.putNumber("ARM PLACE", m_feedforward);
+        SmartDashboard.putNumber("Arm Power", m_motor.get());
     }
 }
