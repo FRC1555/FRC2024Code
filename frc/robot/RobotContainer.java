@@ -80,36 +80,6 @@ public class RobotContainer {
         new JoystickButton(m_DriveController, XboxController.Button.kLeftStick.value)
             .whileTrue(new RunCommand(() -> m_SwerveDrive.setX(), m_SwerveDrive));
 
-        // new JoystickButton(m_DriveController, XboxController.Button.kLeftBumper.value)
-        //     .whileTrue(new RunCommand(
-        //         () ->
-        //             m_SwerveDrive.drive(
-        //                 GamepadUtils.squareInput(
-        //                     m_DriveController.getLeftY(), OperatorInter.kDriveDeadband),
-        //                 GamepadUtils.squareInput(
-        //                     m_DriveController.getLeftX(), OperatorInter.kDriveDeadband),
-        //                 -GamepadUtils.squareInput(
-        //                     m_DriveController.getRightX(), OperatorInter.kDriveDeadband),
-        //                 false,
-        //                 true,
-        //                 Drivetrain.kMaxSpeedMPSSlow),
-        //         m_SwerveDrive));
-    
-        // new JoystickButton(m_DriveController, XboxController.Button.kLeftBumper.value)
-        //     .whileTrue(new RunCommand(
-        //         () ->
-        //             m_SwerveDrive.drive(
-        //                 GamepadUtils.squareInput(
-        //                     m_DriveController.getLeftY(), OperatorInter.kDriveDeadband),
-        //                 GamepadUtils.squareInput(
-        //                     m_DriveController.getLeftX(), OperatorInter.kDriveDeadband),
-        //                 -GamepadUtils.squareInput(
-        //                     m_DriveController.getRightX(), OperatorInter.kDriveDeadband),
-        //                 false,
-        //                 false,
-        //                 Drivetrain.kMaxSpeedMPSRegular),
-        //         m_SwerveDrive));
-        
         new POVButton(m_ManipController, Constants.OperatorInter.kDPadUp)
             .whileTrue(new InstantCommand(() -> m_ShooterArm.setTargetPosition(Constants.Arm.kScoringPosition)));
         new POVButton(m_ManipController, Constants.OperatorInter.kDPadDown)
@@ -134,7 +104,7 @@ public class RobotContainer {
         new JoystickButton(m_ManipController, XboxController.Button.kX.value)
             .onTrue(new ParallelCommandGroup(new LauncherCMD(m_Shooter), new SequentialCommandGroup(new WaitCommand(1), new ShootIntakeCMD(m_ShooterIntake))));
         
-        new JoystickButton(m_DriveController, XboxController.Button.kA.value)
+        new JoystickButton(m_ManipController, XboxController.Button.kA.value)
             .onTrue(new ParallelCommandGroup(new SensoredIntakeCMD(kTopSwitch, m_ShooterIntake), new SensoredArmCMD(kBottomSwitch, m_ShooterArm)));
         // driver button
         new JoystickButton(m_DriveController, XboxController.Button.kX.value)
@@ -143,6 +113,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("BPose2 NoMove");
+        return new PathPlannerAuto("BPose2 1Auto");
     }
 }

@@ -196,10 +196,10 @@ public class Constants {
         public static final boolean kArmInverted = true;
         public static final int kCurrentLimit = 40;
 
-        public static final double kSoftLimitReverse = -1.1;
+        public static final double kSoftLimitReverse = -1.19;
         public static final double kSoftLimitForward = 0.1;
 
-        public static final double kArmGearRatio = (1.0 / 25.0) * (28.0 / 50.0) * (16.0 / 64.0);
+        public static final double kArmGearRatio = (1.0 / 75.0) * (28.0 / 50.0) * (16.0 / 64.0);
         public static final double kPositionFactor =
             kArmGearRatio
                 * 2.0
@@ -213,11 +213,11 @@ public class Constants {
             new ArmFeedforward(0.0, 3.0, 12.0 / kArmFreeSpeed, 0.0);
         public static final PIDGains kArmPositionGains = new PIDGains(1.5, 0.0, 0.0);
         public static final TrapezoidProfile.Constraints kArmMotionConstraint =
-            new TrapezoidProfile.Constraints(2.5, 1.0);
+            new TrapezoidProfile.Constraints(3.5, 1.5);
 
         public static final double kHomePosition = 0.0;
         public static final double kScoringPosition = 0.0;
-        public static final double kIntakePosition = -1.15;
+        public static final double kIntakePosition = -1.30;
         public static final double kClimbPosition = 0.05;
     }
 

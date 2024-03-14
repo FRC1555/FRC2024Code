@@ -163,32 +163,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
     setModuleStates(Constants.Drivetrain.kDriveKinematics.toSwerveModuleStates(chassisSpeeds));
-    // double xSpeed = chassisSpeeds.vxMetersPerSecond;
-    // double ySpeed = chassisSpeeds.vyMetersPerSecond;
-    // double rot = chassisSpeeds.omegaRadiansPerSecond;
-
-    // boolean fieldRelative = false;
-
-    // xSpeedDelivered = xSpeed * Auton.kMaxSpeedMetersPerSecond;
-    // ySpeedDelivered = ySpeed * Auton.kMaxSpeedMetersPerSecond;
-    // rotDelivered = rot * Drivetrain.kMaxAngularSpeed;
-
-    // var swerveModuleStates =
-    //     Drivetrain.kDriveKinematics.toSwerveModuleStates(
-    //         fieldRelative
-    //             ? ChassisSpeeds.fromFieldRelativeSpeeds(
-    //                 xSpeedDelivered,
-    //                 ySpeedDelivered,
-    //                 rotDelivered,
-    //                 Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)))
-    //             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
-    // SwerveDriveKinematics.desaturateWheelSpeeds(
-    //     swerveModuleStates, Auton.kMaxSpeedMetersPerSecond);
-    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    // m_frontRight.setDesiredState(swerveModuleStates[1]);
-    // m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    // m_rearRight.setDesiredState(swerveModuleStates[3]);
-
   }
 
   /**
