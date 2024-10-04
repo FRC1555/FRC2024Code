@@ -217,7 +217,8 @@ public class Constants {
 
         public static final double kHomePosition = 0.0;
         public static final double kScoringPosition = 0.0;
-        public static final double kIntakePosition = -1.30;
+        // public static final double kIntakePosition = -1.30;
+        public static final double kIntakePosition = -1.20;
         public static final double kClimbPosition = 0.05;
     }
 
