@@ -1,6 +1,8 @@
+# Sonic2024
+
 This is a repository for the new updated code for Sonic
 
-List of collaborators
+List of collaborators:
 
 BenMillerHAHA - Ben Miller
 
