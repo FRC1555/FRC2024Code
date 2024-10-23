@@ -10,4 +10,4 @@ Jojo-Ze-Rabbit-42 - Max Arnold
 
 Edit: This code is fully functional, and all works... to my knowledge.
 
-Signed, Jojo-Ze-Rabbit-42, AKA Maxx the Kraken
+Signed, Jojo-Ze-Rabbit-42, AKA Maxx AKA Rice Crispies
