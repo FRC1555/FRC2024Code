@@ -2,13 +2,11 @@
 
 This is a repository for the new updated code for Sonic
 
-List of collaborators:
+List of collaborators
+1. Jojo-Ze-Rabbit-42 - Max Arnold AKA Rice Crispies
+2. BenMillerHAHA - Ben Miller
+3. Maurizio - Need to Make account
 
-BenMillerHAHA - Ben Miller
-
-Maurizio - Need to Make account
-
-Jojo-Ze-Rabbit-42 - Max Arnold AKA Rice Crispies
 
 Edit: This code is fully functional, and all works... to my knowledge.
 
