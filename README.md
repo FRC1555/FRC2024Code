@@ -6,8 +6,8 @@ BenMillerHAHA - Ben Miller
 
 Maurizio - Need to Make account
 
-Jojo-Ze-Rabbit-42 - Max Arnold
+Jojo-Ze-Rabbit-42 - Max Arnold AKA Rice Crispies
 
 Edit: This code is fully functional, and all works... to my knowledge.
 
-Signed, Jojo-Ze-Rabbit-42, AKA Maxx AKA Rice Crispies
+Signed, Jojo-Ze-Rabbit-42, AKA Rice Crispies
