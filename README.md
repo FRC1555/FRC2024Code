@@ -8,6 +8,7 @@ List of collaborators
 3. Maurizio - Need to Make account
 
 
-Edit: This code is fully functional, and all works... to my knowledge.
+Edit: This code is a testing version designed to enable Operation of Sonic using only one controller. 
+This is untested but will be tested at the nearest opportunity.
 
 Signed, Jojo-Ze-Rabbit-42, AKA Rice Crispies
