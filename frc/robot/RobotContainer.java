@@ -106,10 +106,12 @@ public class RobotContainer {
         
         new JoystickButton(m_ManipController, XboxController.Button.kA.value)
             .onTrue(new ParallelCommandGroup(new SensoredIntakeCMD(kTopSwitch, m_ShooterIntake), new SensoredArmCMD(kBottomSwitch, m_ShooterArm)));
-        // driver button
-        new JoystickButton(m_DriveController, XboxController.Button.kX.value)
+        // old driver button
+        // new JoystickButton(m_DriveController, XboxController.Button.kX.value)
+        //     .onTrue(new InstantCommand(() -> m_SwerveDrive.resetPose(Constants.Drivetrain.kDefaultPose)));
+        // driver button test
+        new JoystickButton(m_DriveController, XboxController.Button.kB.value)
             .onTrue(new InstantCommand(() -> m_SwerveDrive.resetPose(Constants.Drivetrain.kDefaultPose)));
-        
     }
 
     public Command getAutonomousCommand() {
