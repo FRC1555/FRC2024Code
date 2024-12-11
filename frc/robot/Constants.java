@@ -21,8 +21,13 @@ public class Constants {
     }
 
     public static final class OperatorInter {
+        // // original controller assignment
+        // public static final int DriverController = 1;
+        // public static final int ManipController = 0;
+        // controller assignment test
         public static final int DriverController = 1;
-        public static final int ManipController = 0;
+        public static final int ManipController = 1;
+        
         public static final double kDriveDeadband = 0.05;
         public static final double kArmManualDeadband = 0.05;
         public static final double kArmManualScale = 0.5;
